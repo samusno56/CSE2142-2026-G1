@@ -20,13 +20,15 @@ public class EmployeeManager {
             System.out.println(Constants.LOADING_DATA);
             System.out.println(readRawContentFromFile());
             String[] employees = readEmployeesFromFile();
-            System.out.println(employees[new Random().nextInt(employees.length)]);
+            if (employees.length > 0) {
+                System.out.println(employees[new Random().nextInt(employees.length)]);
+            }
             System.out.println(Constants.DATA_LOADED);
-        } else if (command.contains(Constants.CMD_ADD)) {
+        } else if (command.startsWith(Constants.CMD_ADD) && command.length() > 1) {
             System.out.println(Constants.LOADING_DATA);
             appendEmployeeToFile(command.substring(1).trim());
             System.out.println(Constants.DATA_LOADED);
-        } else if (command.contains(Constants.CMD_SEARCH)) {
+        } else if (command.startsWith(Constants.CMD_SEARCH) && command.length() > 1) {
             System.out.println(Constants.LOADING_DATA);
             searchEmployee(command.substring(1).trim());
             System.out.println(Constants.DATA_LOADED);
@@ -38,7 +40,7 @@ public class EmployeeManager {
                     : content.trim().split(Constants.WHITESPACE_REGEX).length;
             System.out.println(wordCount + Constants.WORD_COUNT_SUFFIX + content.length());
             System.out.println(Constants.DATA_LOADED);
-        } else if (command.contains(Constants.CMD_UPDATE)) {
+        } else if (command.startsWith(Constants.CMD_UPDATE) && command.length() > 1) {
             System.out.println(Constants.LOADING_DATA);
             String[] employees = readEmployeesFromFile();
             for (int i = 0; i < employees.length; i++) {
@@ -48,12 +50,14 @@ public class EmployeeManager {
             }
             writeEmployeesToFile(employees);
             System.out.println(Constants.DATA_UPDATED);
-        } else if (command.contains(Constants.CMD_DELETE)) {
+        } else if (command.startsWith(Constants.CMD_DELETE) && command.length() > 1) {
             System.out.println(Constants.LOADING_DATA);
             List<String> employeeList = new ArrayList<>(Arrays.asList(readEmployeesFromFile()));
             employeeList.remove(command.substring(1).trim());
             writeEmployeesToFile(employeeList.toArray(new String[0]));
             System.out.println(Constants.DATA_DELETED);
+        } else {
+            System.out.println(Constants.ERROR_INVALID_ARG);
         }
     }
 
