@@ -4,47 +4,47 @@ import java.util.*;
 public class EmployeeManager {
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.out.println("Invalid number of arguments. Please provide exactly one argument.");
+            System.out.println(Constants.ERROR_ARG_COUNT);
             return;
         }
 
         String command = args[0];
 
-        if (command.equals("l")) {
-            System.out.println("Loading data ...");
+        if (command.equals(Constants.CMD_LIST)) {
+            System.out.println(Constants.LOADING_DATA);
             String[] employees = readEmployeesFromFile();
             for (String employee : employees) {
                 System.out.println(employee);
             }
-            System.out.println("Data Loaded.");
-        } else if (command.equals("s")) {
-            System.out.println("Loading data ...");
+            System.out.println(Constants.DATA_LOADED);
+        } else if (command.equals(Constants.CMD_RANDOM)) {
+            System.out.println(Constants.LOADING_DATA);
             String rawContent = readRawContentFromFile();
             System.out.println(rawContent);
             String[] employees = readEmployeesFromFile();
             Random random = new Random();
             int randomIndex = random.nextInt(employees.length);
             System.out.println(employees[randomIndex]);
-            System.out.println("Data Loaded.");
-        } else if (command.contains("+")) {
-            System.out.println("Loading data ...");
+            System.out.println(Constants.DATA_LOADED);
+        } else if (command.contains(Constants.CMD_ADD)) {
+            System.out.println(Constants.LOADING_DATA);
             String newEmployee = command.substring(1).trim();
             appendEmployeeToFile(newEmployee);
-            System.out.println("Data Loaded.");
-        } else if (command.contains("?")) {
-            System.out.println("Loading data ...");
+            System.out.println(Constants.DATA_LOADED);
+        } else if (command.contains(Constants.CMD_SEARCH)) {
+            System.out.println(Constants.LOADING_DATA);
             String[] employees = readEmployeesFromFile();
             boolean found = false;
             String searchEmployee = command.substring(1).trim();
             for (int i = 0; i < employees.length && !found; i++) {
                 if (employees[i].equals(searchEmployee)) {
-                    System.out.println("Employee found!");
+                    System.out.println(Constants.EMPLOYEE_FOUND);
                     found = true;
                 }
             }
-            System.out.println("Data Loaded.");
-        } else if (command.contains("c")) {
-            System.out.println("Loading data ...");
+            System.out.println(Constants.DATA_LOADED);
+        } else if (command.contains(Constants.CMD_COUNT)) {
+            System.out.println(Constants.LOADING_DATA);
             String rawContent = readRawContentFromFile();
             char[] characters = rawContent.toCharArray();
             boolean inWord = false;
@@ -59,33 +59,33 @@ public class EmployeeManager {
                     }
                 }
             }
-            System.out.println(wordCount + " word(s) found " + characters.length);
-            System.out.println("Data Loaded.");
-        } else if (command.contains("u")) {
-            System.out.println("Loading data ...");
+            System.out.println(wordCount + Constants.WORD_COUNT_SUFFIX + characters.length);
+            System.out.println(Constants.DATA_LOADED);
+        } else if (command.contains(Constants.CMD_UPDATE)) {
+            System.out.println(Constants.LOADING_DATA);
             String[] employees = readEmployeesFromFile();
             String targetEmployee = command.substring(1).trim();
             for (int i = 0; i < employees.length; i++) {
                 if (employees[i].equals(targetEmployee)) {
-                    employees[i] = "Updated";
+                    employees[i] = Constants.UPDATED_VALUE;
                 }
             }
             writeEmployeesToFile(employees);
-            System.out.println("Data Updated.");
-        } else if (command.contains("d")) {
-            System.out.println("Loading data ...");
+            System.out.println(Constants.DATA_UPDATED);
+        } else if (command.contains(Constants.CMD_DELETE)) {
+            System.out.println(Constants.LOADING_DATA);
             String[] employees = readEmployeesFromFile();
             String targetEmployee = command.substring(1).trim();
             List<String> employeeList = new ArrayList<>(Arrays.asList(employees));
             employeeList.remove(targetEmployee);
             writeEmployeesToFile(employeeList.toArray(new String[0]));
-            System.out.println("Data Deleted.");
+            System.out.println(Constants.DATA_DELETED);
         }
     }
 
     private static String readRawContentFromFile() {
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream("employees.txt")))) {
+                new InputStreamReader(new FileInputStream(Constants.FILE_NAME)))) {
             String line = reader.readLine();
             return line != null ? line : "";
         } catch (IOException exception) {
@@ -98,7 +98,7 @@ public class EmployeeManager {
         if (rawContent.trim().isEmpty()) {
             return new String[0];
         }
-        String[] employees = rawContent.split(",");
+        String[] employees = rawContent.split(Constants.COMMA_DELIMITER);
         for (int i = 0; i < employees.length; i++) {
             employees[i] = employees[i].trim();
         }
@@ -106,15 +106,15 @@ public class EmployeeManager {
     }
 
     private static void appendEmployeeToFile(String newEmployee) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("employees.txt", true))) {
-            writer.write(", " + newEmployee);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Constants.FILE_NAME, true))) {
+            writer.write(Constants.COMMA_SPACE + newEmployee);
         } catch (IOException exception) {
         }
     }
 
     private static void writeEmployeesToFile(String[] employees) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("employees.txt"))) {
-            writer.write(String.join(", ", employees));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Constants.FILE_NAME))) {
+            writer.write(String.join(Constants.COMMA_SPACE, employees));
         } catch (IOException exception) {
         }
     }
