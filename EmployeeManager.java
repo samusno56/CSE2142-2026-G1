@@ -28,14 +28,7 @@ public class EmployeeManager {
             System.out.println(Constants.DATA_LOADED);
         } else if (command.contains(Constants.CMD_SEARCH)) {
             System.out.println(Constants.LOADING_DATA);
-            String[] employees = readEmployeesFromFile();
-            boolean found = false;
-            for (int i = 0; i < employees.length && !found; i++) {
-                if (employees[i].equals(command.substring(1).trim())) {
-                    System.out.println(Constants.EMPLOYEE_FOUND);
-                    found = true;
-                }
-            }
+            searchEmployee(command.substring(1).trim());
             System.out.println(Constants.DATA_LOADED);
         } else if (command.contains(Constants.CMD_COUNT)) {
             System.out.println(Constants.LOADING_DATA);
@@ -71,6 +64,16 @@ public class EmployeeManager {
             writeEmployeesToFile(employeeList.toArray(new String[0]));
             System.out.println(Constants.DATA_DELETED);
         }
+    }
+
+    private static void searchEmployee(String targetEmployee) {
+        for (String employee : readEmployeesFromFile()) {
+            if (employee.equals(targetEmployee)) {
+                System.out.println(Constants.EMPLOYEE_FOUND);
+                return;
+            }
+        }
+        System.out.println(Constants.EMPLOYEE_NOT_FOUND);
     }
 
     private static String readRawContentFromFile() {
