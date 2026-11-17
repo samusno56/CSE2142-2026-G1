@@ -30,22 +30,13 @@ public class EmployeeManager {
             System.out.println(Constants.LOADING_DATA);
             searchEmployee(command.substring(1).trim());
             System.out.println(Constants.DATA_LOADED);
-        } else if (command.contains(Constants.CMD_COUNT)) {
+        } else if (command.equals(Constants.CMD_COUNT)) {
             System.out.println(Constants.LOADING_DATA);
-            char[] characters = readRawContentFromFile().toCharArray();
-            boolean inWord = false;
-            int wordCount = 0;
-            for (char currentChar : characters) {
-                if (currentChar == ' ') {
-                    if (!inWord) {
-                        wordCount++;
-                        inWord = true;
-                    } else {
-                        inWord = false;
-                    }
-                }
-            }
-            System.out.println(wordCount + Constants.WORD_COUNT_SUFFIX + characters.length);
+            String content = readRawContentFromFile();
+            int wordCount = content.trim().isEmpty()
+                    ? 0
+                    : content.trim().split(Constants.WHITESPACE_REGEX).length;
+            System.out.println(wordCount + Constants.WORD_COUNT_SUFFIX + content.length());
             System.out.println(Constants.DATA_LOADED);
         } else if (command.contains(Constants.CMD_UPDATE)) {
             System.out.println(Constants.LOADING_DATA);
