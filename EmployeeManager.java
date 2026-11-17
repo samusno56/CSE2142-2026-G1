@@ -12,32 +12,26 @@ public class EmployeeManager {
 
         if (command.equals(Constants.CMD_LIST)) {
             System.out.println(Constants.LOADING_DATA);
-            String[] employees = readEmployeesFromFile();
-            for (String employee : employees) {
+            for (String employee : readEmployeesFromFile()) {
                 System.out.println(employee);
             }
             System.out.println(Constants.DATA_LOADED);
         } else if (command.equals(Constants.CMD_RANDOM)) {
             System.out.println(Constants.LOADING_DATA);
-            String rawContent = readRawContentFromFile();
-            System.out.println(rawContent);
+            System.out.println(readRawContentFromFile());
             String[] employees = readEmployeesFromFile();
-            Random random = new Random();
-            int randomIndex = random.nextInt(employees.length);
-            System.out.println(employees[randomIndex]);
+            System.out.println(employees[new Random().nextInt(employees.length)]);
             System.out.println(Constants.DATA_LOADED);
         } else if (command.contains(Constants.CMD_ADD)) {
             System.out.println(Constants.LOADING_DATA);
-            String newEmployee = command.substring(1).trim();
-            appendEmployeeToFile(newEmployee);
+            appendEmployeeToFile(command.substring(1).trim());
             System.out.println(Constants.DATA_LOADED);
         } else if (command.contains(Constants.CMD_SEARCH)) {
             System.out.println(Constants.LOADING_DATA);
             String[] employees = readEmployeesFromFile();
             boolean found = false;
-            String searchEmployee = command.substring(1).trim();
             for (int i = 0; i < employees.length && !found; i++) {
-                if (employees[i].equals(searchEmployee)) {
+                if (employees[i].equals(command.substring(1).trim())) {
                     System.out.println(Constants.EMPLOYEE_FOUND);
                     found = true;
                 }
@@ -45,8 +39,7 @@ public class EmployeeManager {
             System.out.println(Constants.DATA_LOADED);
         } else if (command.contains(Constants.CMD_COUNT)) {
             System.out.println(Constants.LOADING_DATA);
-            String rawContent = readRawContentFromFile();
-            char[] characters = rawContent.toCharArray();
+            char[] characters = readRawContentFromFile().toCharArray();
             boolean inWord = false;
             int wordCount = 0;
             for (char currentChar : characters) {
@@ -64,9 +57,8 @@ public class EmployeeManager {
         } else if (command.contains(Constants.CMD_UPDATE)) {
             System.out.println(Constants.LOADING_DATA);
             String[] employees = readEmployeesFromFile();
-            String targetEmployee = command.substring(1).trim();
             for (int i = 0; i < employees.length; i++) {
-                if (employees[i].equals(targetEmployee)) {
+                if (employees[i].equals(command.substring(1).trim())) {
                     employees[i] = Constants.UPDATED_VALUE;
                 }
             }
@@ -74,10 +66,8 @@ public class EmployeeManager {
             System.out.println(Constants.DATA_UPDATED);
         } else if (command.contains(Constants.CMD_DELETE)) {
             System.out.println(Constants.LOADING_DATA);
-            String[] employees = readEmployeesFromFile();
-            String targetEmployee = command.substring(1).trim();
-            List<String> employeeList = new ArrayList<>(Arrays.asList(employees));
-            employeeList.remove(targetEmployee);
+            List<String> employeeList = new ArrayList<>(Arrays.asList(readEmployeesFromFile()));
+            employeeList.remove(command.substring(1).trim());
             writeEmployeesToFile(employeeList.toArray(new String[0]));
             System.out.println(Constants.DATA_DELETED);
         }
